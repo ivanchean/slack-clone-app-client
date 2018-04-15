@@ -38,7 +38,7 @@ class Register extends React.Component {
     }
 
     return (
-      <Container>
+      <Container text>
         <Mutation mutation={REGISTER}>
         { (register, { data }) => (
             <div>
