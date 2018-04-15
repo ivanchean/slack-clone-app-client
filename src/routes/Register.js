@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Input, Container, Header } from 'semantic-ui-react';
+import { Message, Button, Input, Container, Header } from 'semantic-ui-react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 
@@ -22,7 +22,21 @@ class Register extends React.Component {
   render() {
 
     const { username, email, password, usernameError, emailError, passwordError } = this.state;
-    // !!'' => false
+
+    const errorList = [];
+
+    if (usernameError) {
+      errorList.push(usernameError);
+    }
+
+    if (emailError) {
+      errorList.push(emailError);
+    }   
+
+    if (passwordError) {
+      errorList.push(passwordError);
+    }
+
     return (
       <Container>
         <Mutation mutation={REGISTER}>
@@ -56,6 +70,11 @@ class Register extends React.Component {
               />
               <Button 
                 onClick={ async e => {
+                  this.setState({
+                    usernameError: '',
+                    emailError: '',
+                    passwordError: '',
+                  }); 
                   try {
                     const res = await register({ 
                       variables: { username, email, password } 
@@ -78,6 +97,12 @@ class Register extends React.Component {
               >
                 Submit
               </Button>
+              {
+                // Error List
+                usernameError || emailError || passwordError ? (
+                  <Message error header="There are some errors with your submission" list={errorList}></Message>
+                ) : null
+              }
             </div>
           )
         }
