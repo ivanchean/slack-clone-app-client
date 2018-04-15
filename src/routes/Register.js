@@ -7,8 +7,11 @@ class Register extends React.Component {
 
   state = {
     username: '',
+    usernameError: '',
     email: '',
+    emailError: '',
     password: '',
+    passwordError: '',
   };
 
   onChange = e => {
@@ -18,23 +21,56 @@ class Register extends React.Component {
   
   render() {
 
-    const { username, email, password } = this.state;
-
+    const { username, email, password, usernameError, emailError, passwordError } = this.state;
+    // !!'' => false
     return (
       <Container>
         <Mutation mutation={REGISTER}>
         { (register, { data }) => (
             <div>
               <Header as="h2">Register</Header>
-              <Input name="username" onChange={this.onChange} value={username}  placeholder="Username" fluid />
-              <Input name="email" onChange={this.onChange} value={email} placeholder="Email" fluid />
-              <Input name="password" onChange={this.onChange} value={password} type="password" placeholder="password" fluid/>
+              <Input 
+                error={!!usernameError}
+                name="username" 
+                onChange={this.onChange} 
+                value={username}  
+                placeholder="Username" 
+                fluid 
+              />
+              <Input 
+                error={!!emailError}
+                name="email" 
+                onChange={this.onChange} 
+                value={email} 
+                placeholder="Email" 
+                fluid 
+              />
+              <Input 
+                error={!!passwordError}
+                name="password" 
+                onChange={this.onChange} 
+                value={password} 
+                type="password" 
+                placeholder="password" 
+                fluid
+              />
               <Button 
                 onClick={ async e => {
                   try {
-                    await register({ variables: { username, email, password } });
-                    alert('注册成功！');
-                    this.setState({ username: '', email: '', password: '' });
+                    const res = await register({ 
+                      variables: { username, email, password } 
+                    });
+                    const { ok, errors } = res.data.register;
+                    if (ok) {
+                      this.props.history.push('/');
+                    } else {
+                      const err = {};
+                      errors.forEach(({ path, message }) => {
+                        err[`${path}Error`] = message;
+                      });
+                      console.log('err', err);
+                      this.setState(err);
+                    }
                   } catch (err) {
                     console.log(err);
                   }
@@ -53,7 +89,13 @@ class Register extends React.Component {
 
 const REGISTER = gql`
   mutation($username: String!, $email: String!, $password: String!) {
-    register(username: $username, email: $email, password: $password)
+    register(username: $username, email: $email, password: $password) {
+      ok
+      errors {
+        path 
+        message
+      }
+    }
   }
 `; 
 
