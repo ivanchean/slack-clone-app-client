@@ -69,7 +69,7 @@ class Register extends React.Component {
                 fluid
               />
               <Button 
-                onClick={ async e => {
+                onClick={ async () => {
                   this.setState({
                     usernameError: '',
                     emailError: '',

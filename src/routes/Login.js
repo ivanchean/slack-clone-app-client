@@ -6,9 +6,11 @@ import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 
 const LOGIN = gql`
-  mutation($username: String!, $email: String!, $password: String!) {
-    register(username: $username, email: $email, password: $password) {
+  mutation($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
       ok
+      token
+      refreshToken
       errors {
         path 
         message
@@ -17,7 +19,7 @@ const LOGIN = gql`
   }
 `;
 
-export default observer(class Login extends React.Component {
+class Login extends React.Component {
   constructor(props) {
     super(props);
 
@@ -36,33 +38,52 @@ export default observer(class Login extends React.Component {
     const { email, password } = this;    
     return (
       <Container text>
-        <div>
-          <Header as="h2">Login</Header>
-          <Input
-            name="email"
-            onChange={this.onChange}
-            value={email}
-            placeholder="Email"
-            fluid
-          />
-          <Input
-            name="password"
-            onChange={this.onChange}
-            value={password}
-            type="password"
-            placeholder="password"
-            fluid
-          />
-          <Button
-            onClick={ async () => {
-              console.log(email, password);
-            }}  
-          >
-              Submit
-          </Button>
-        </div>
+        <Mutation mutation={LOGIN}>
+        { (login, { data }) => (
+            <div>
+              <Header as="h2">Login</Header>
+              <Input
+                name="email"
+                onChange={this.onChange}
+                value={email}
+                placeholder="Email"
+                fluid
+              />
+              <Input
+                name="password"
+                onChange={this.onChange}
+                value={password}
+                type="password"
+                placeholder="password"
+                fluid
+              />
+              <Button
+                onClick={ async () => {
+                  try {
+                    const res = await login({ 
+                      variables: { email, password },
+                    });
+                    console.log(res);
+                    const { ok, token, refreshToken } = res.data.login;
+                    if (ok) {
+                      localStorage.setItem('token', token);
+                      localStorage.setItem('refreshToken', refreshToken);
+                    }
+                  } catch (err) {
+                    console.log(err);
+                  }
+                }}  
+              >
+                  Submit
+              </Button>
+            </div>
+          )
+        }
+        </Mutation>
       </Container>
     );
   }
-});
+};
+
+export default observer(Login);
 
