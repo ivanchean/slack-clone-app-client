@@ -1,7 +1,7 @@
 import React from 'react';
 import { extendObservable } from 'mobx';
 import { observer } from 'mobx-react';
-import { Button, Input, Container, Header } from 'semantic-ui-react';
+import { Message, Form, Button, Input, Container, Header } from 'semantic-ui-react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 
@@ -26,60 +26,88 @@ class Login extends React.Component {
     extendObservable(this, {
       email: '',
       password: '',
+      errors: {},
     });
   }
 
-  onChange = e => {
+  onChange = (e) => {
     const { name, value } = e.target;
     this[name] = value;
   }
 
   render() {
-    const { email, password } = this;    
+    const { email, password, errors: { emailError, passwordError } } = this;
+
+    const errorList = [];
+
+    if (emailError) {
+      errorList.push(emailError);
+    }
+
+    if (passwordError) {
+      errorList.push(passwordError);
+    }
+
     return (
       <Container text>
         <Mutation mutation={LOGIN}>
-        { (login, { data }) => (
+          { (login, { data }) => (
             <div>
               <Header as="h2">Login</Header>
-              <Input
-                name="email"
-                onChange={this.onChange}
-                value={email}
-                placeholder="Email"
-                fluid
-              />
-              <Input
-                name="password"
-                onChange={this.onChange}
-                value={password}
-                type="password"
-                placeholder="password"
-                fluid
-              />
-              <Button
-                onClick={ async () => {
-                  try {
-                    const res = await login({ 
+              <Form>
+                <Form.Field error={!!emailError}>
+                  <Input
+                    name="email"
+                    onChange={this.onChange}
+                    value={email}
+                    placeholder="Email"
+                    fluid
+                  />
+                </Form.Field>
+                <Form.Field error={!!passwordError}>
+                  <Input
+                    name="password"
+                    onChange={this.onChange}
+                    value={password}
+                    type="password"
+                    placeholder="password"
+                    fluid
+                  />
+                </Form.Field>
+                <Button
+                  onClick={async () => {
+                    const res = await login({
                       variables: { email, password },
                     });
-                    console.log(res);
-                    const { ok, token, refreshToken } = res.data.login;
+                    const {
+                      ok, token, refreshToken, errors,
+                    } = res.data.login;
                     if (ok) {
                       localStorage.setItem('token', token);
                       localStorage.setItem('refreshToken', refreshToken);
+                      this.props.history.push('/');
+                    } else {
+                      const err = {};
+                      errors.forEach(({ path, message }) => {
+                        err[`${path}Error`] = message;
+                      });
+                      this.errors = err;
                     }
-                  } catch (err) {
-                    console.log(err);
-                  }
-                }}  
-              >
+                  }}
+                >
                   Submit
-              </Button>
+                </Button>
+              </Form>
             </div>
-          )
-        }
+            )
+          }
         </Mutation>
+        {
+          // Error List
+          errorList.length ? (
+            <Message error header="There are some errors with your submission" list={errorList}></Message>
+          ) : null
+        }
       </Container>
     );
   }

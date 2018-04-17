@@ -1,10 +1,21 @@
 import React from 'react';
-import { Message, Button, Input, Container, Header } from 'semantic-ui-react';
+import { Form, Message, Button, Input, Container, Header } from 'semantic-ui-react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 
-class Register extends React.Component {
+const REGISTER = gql`
+  mutation($username: String!, $email: String!, $password: String!) {
+    register(username: $username, email: $email, password: $password) {
+      ok
+      errors {
+        path 
+        message
+      }
+    }
+  }
+`;
 
+class Register extends React.Component {
   state = {
     username: '',
     usernameError: '',
@@ -14,14 +25,15 @@ class Register extends React.Component {
     passwordError: '',
   };
 
-  onChange = e => {
+  onChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
-  
-  render() {
 
-    const { username, email, password, usernameError, emailError, passwordError } = this.state;
+  render() {
+    const {
+      username, email, password, usernameError, emailError, passwordError,
+    } = this.state;
 
     const errorList = [];
 
@@ -40,88 +52,81 @@ class Register extends React.Component {
     return (
       <Container text>
         <Mutation mutation={REGISTER}>
-        { (register, { data }) => (
+          { (register, { data }) => (
             <div>
               <Header as="h2">Register</Header>
-              <Input 
-                error={!!usernameError}
-                name="username" 
-                onChange={this.onChange} 
-                value={username}  
-                placeholder="Username" 
-                fluid 
-              />
-              <Input 
-                error={!!emailError}
-                name="email" 
-                onChange={this.onChange} 
-                value={email} 
-                placeholder="Email" 
-                fluid 
-              />
-              <Input 
-                error={!!passwordError}
-                name="password" 
-                onChange={this.onChange} 
-                value={password} 
-                type="password" 
-                placeholder="password" 
-                fluid
-              />
-              <Button 
-                onClick={ async () => {
-                  this.setState({
-                    usernameError: '',
-                    emailError: '',
-                    passwordError: '',
-                  }); 
-                  try {
-                    const res = await register({ 
-                      variables: { username, email, password } 
+              <Form>
+                <Form.Field error={!!usernameError}>
+                  <Input
+                    name="username"
+                    onChange={this.onChange}
+                    value={username}
+                    placeholder="Username"
+                    fluid
+                  />
+                </Form.Field>
+                <Form.Field error={!!emailError}>
+                  <Input
+                    name="email"
+                    onChange={this.onChange}
+                    value={email}
+                    placeholder="Email"
+                    fluid
+                  />
+                </Form.Field>
+                <Form.Field error={!!passwordError}>
+                  <Input
+                    name="password"
+                    onChange={this.onChange}
+                    value={password}
+                    type="password"
+                    placeholder="password"
+                    fluid
+                  />
+                </Form.Field>
+                <Button
+                  onClick={async () => {
+                    this.setState({
+                      usernameError: '',
+                      emailError: '',
+                      passwordError: '',
                     });
-                    const { ok, errors } = res.data.register;
-                    if (ok) {
-                      this.props.history.push('/');
-                    } else {
-                      const err = {};
-                      errors.forEach(({ path, message }) => {
-                        err[`${path}Error`] = message;
+                    try {
+                      const res = await register({
+                        variables: { username, email, password }
                       });
-                      console.log('err', err);
-                      this.setState(err);
+                      const { ok, errors } = res.data.register;
+                      if (ok) {
+                        this.props.history.push('/');
+                      } else {
+                        const err = {};
+                        errors.forEach(({ path, message }) => {
+                          err[`${path}Error`] = message;
+                        });
+                        console.log('err', err);
+                        this.setState(err);
+                      }
+                    } catch (err) {
+                      console.log(err);
                     }
-                  } catch (err) {
-                    console.log(err);
-                  }
-                }}
-              >
-                Submit
-              </Button>
-              {
-                // Error List
-                usernameError || emailError || passwordError ? (
-                  <Message error header="There are some errors with your submission" list={errorList}></Message>
-                ) : null
-              }
+                  }}
+                >
+                  Submit
+                </Button>
+              </Form>
             </div>
           )
-        }
+          }
         </Mutation>
+        {
+          // Error List
+          errorList.length ? (
+            <Message error header="There are some errors with your submission" list={errorList}></Message>
+          ) : null
+        }
       </Container>
     );
-  } 
-}
-
-const REGISTER = gql`
-  mutation($username: String!, $email: String!, $password: String!) {
-    register(username: $username, email: $email, password: $password) {
-      ok
-      errors {
-        path 
-        message
-      }
-    }
   }
-`; 
+}
 
 export default Register;
