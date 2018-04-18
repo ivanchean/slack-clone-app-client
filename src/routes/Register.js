@@ -91,23 +91,19 @@ class Register extends React.Component {
                       emailError: '',
                       passwordError: '',
                     });
-                    try {
-                      const res = await register({
-                        variables: { username, email, password }
+                    const res = await register({
+                      variables: { username, email, password }
+                    });
+                    const { ok, errors } = res.data.register;
+                    if (ok) {
+                      this.props.history.push('/');
+                    } else {
+                      const err = {};
+                      errors.forEach(({ path, message }) => {
+                        err[`${path}Error`] = message;
                       });
-                      const { ok, errors } = res.data.register;
-                      if (ok) {
-                        this.props.history.push('/');
-                      } else {
-                        const err = {};
-                        errors.forEach(({ path, message }) => {
-                          err[`${path}Error`] = message;
-                        });
-                        console.log('err', err);
-                        this.setState(err);
-                      }
-                    } catch (err) {
-                      console.log(err);
+                      console.log('err', err);
+                      this.setState(err);
                     }
                   }}
                 >

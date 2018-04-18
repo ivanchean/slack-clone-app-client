@@ -19,13 +19,12 @@ const LOGIN = gql`
   }
 `;
 
-class Login extends React.Component {
+class CreateTeam extends React.Component {
   constructor(props) {
     super(props);
 
     extendObservable(this, {
-      email: '',
-      password: '',
+      name: '',
       errors: {},
     });
   }
@@ -36,12 +35,12 @@ class Login extends React.Component {
   }
 
   render() {
-    const { email, password, errors: { emailError, passwordError } } = this;
+    const { name, errors: { nameError } } = this;
 
     const errorList = [];
 
-    if (emailError) {
-      errorList.push(emailError);
+    if (nameError) {
+      errorList.push(nameError);
     }
 
     if (passwordError) {
@@ -55,45 +54,17 @@ class Login extends React.Component {
             <div>
               <Header as="h2">Login</Header>
               <Form>
-                <Form.Field error={!!emailError}>
+                <Form.Field error={!!nameError}>
                   <Input
-                    name="email"
+                    name="name"
                     onChange={this.onChange}
-                    value={email}
-                    placeholder="Email"
-                    fluid
-                  />
-                </Form.Field>
-                <Form.Field error={!!passwordError}>
-                  <Input
-                    name="password"
-                    onChange={this.onChange}
-                    value={password}
-                    type="password"
-                    placeholder="password"
+                    value={name}
+                    placeholder="Name"
                     fluid
                   />
                 </Form.Field>
                 <Button
                   onClick={async () => {
-                    const res = await login({
-                      variables: { email, password },
-                    });
-                    const {
-                      ok, token, refreshToken, errors,
-                    } = res.data.login;
-                    if (ok) {
-                      localStorage.setItem('token', token);
-                      localStorage.setItem('refreshToken', refreshToken);
-                      this.props.history.push('/');
-                    } else {
-                      const err = {};
-                      errors.forEach(({ path, message }) => {
-                        err[`${path}Error`] = message;
-                      });
-                      this.errors = err;
-                    }
-                    console.log(res);
                   }}
                 >
                   Submit
@@ -114,5 +85,5 @@ class Login extends React.Component {
   }
 }
 
-export default observer(Login);
+export default observer(CreateTeam);
 
