@@ -9,6 +9,9 @@ const LOGIN = gql`
   mutation($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       ok
+      user {
+        id
+      }
       token
       refreshToken
       errors {
@@ -80,9 +83,10 @@ class Login extends React.Component {
                       variables: { email, password },
                     });
                     const {
-                      ok, token, refreshToken, errors,
+                      ok, token, refreshToken, errors, user,
                     } = res.data.login;
                     if (ok) {
+                      localStorage.setItem('userId', user.id);
                       localStorage.setItem('token', token);
                       localStorage.setItem('refreshToken', refreshToken);
                       this.props.history.push('/');
@@ -93,7 +97,6 @@ class Login extends React.Component {
                       });
                       this.errors = err;
                     }
-                    console.log(res);
                   }}
                 >
                   Submit

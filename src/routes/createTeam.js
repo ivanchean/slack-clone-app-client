@@ -5,12 +5,10 @@ import { Message, Form, Button, Input, Container, Header } from 'semantic-ui-rea
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 
-const LOGIN = gql`
-  mutation($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
+const CREATE_TEAM = gql`
+  mutation($name: String!) {
+    createTeam(name: $name) {
       ok
-      token
-      refreshToken
       errors {
         path 
         message
@@ -43,16 +41,12 @@ class CreateTeam extends React.Component {
       errorList.push(nameError);
     }
 
-    if (passwordError) {
-      errorList.push(passwordError);
-    }
-
     return (
       <Container text>
-        <Mutation mutation={LOGIN}>
-          { (login, { data }) => (
+        <Mutation mutation={CREATE_TEAM}>
+          { (createTeam, { data }) => (
             <div>
-              <Header as="h2">Login</Header>
+              <Header as="h2">Create a Team</Header>
               <Form>
                 <Form.Field error={!!nameError}>
                   <Input
@@ -65,6 +59,20 @@ class CreateTeam extends React.Component {
                 </Form.Field>
                 <Button
                   onClick={async () => {
+                    const res = await createTeam({
+                      variables: { name },
+                    });
+                    const { ok, errors } = res.data.createTeam;
+                    if (ok) {
+                      this.props.history.push('/');
+                    } else {
+                      const err = {};
+                      errors.forEach(({ path, message }) => {
+                        err[`${path}Error`] = message;
+                      });
+                      this.errors = err;
+                    }
+                    console.log(res);
                   }}
                 >
                   Submit
