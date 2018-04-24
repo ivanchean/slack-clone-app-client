@@ -59,9 +59,15 @@ class CreateTeam extends React.Component {
                 </Form.Field>
                 <Button
                   onClick={async () => {
-                    const res = await createTeam({
-                      variables: { name },
-                    });
+                    let res = null;
+                    try {
+                      res = await createTeam({
+                        variables: { name },
+                      });
+                    } catch (err) {
+                      this.props.history.push('/login');
+                      return;
+                    }
                     const { ok, errors } = res.data.createTeam;
                     if (ok) {
                       this.props.history.push('/');
