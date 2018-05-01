@@ -8,7 +8,7 @@ const ChannelWrapper = styled.div`
   color: #9f939e;
 `;
 
-const channel = ({ id, name }) => <li key={`channel-${id}`}>{name}</li>;
+const channel = ({ id, name }) => <li key={`channel-${id}`}># {name}</li>;
 
 const user = ({ id, name }) => <li key={`user-${id}`}>{name}</li>;
 
