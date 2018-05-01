@@ -1,23 +1,33 @@
 import React from 'react';
-import { Grid } from 'semantic-ui-react'
 
-import TeamSidebar from '../components/TeamSidebar';
-import TeamHeader from '../components/TeamHeader';
-import MessageInput from '../components/MessageInput';
+import Channels from '../components/Channels';
+import Teams from '../components/Teams';
+import Header from '../components/Header';
+import Messages from '../components/Messages';
+import Input from '../components/Input';
+import AppLayout from '../components/AppLayout';
 
 export default () => (
-  <Grid>
-    <Grid.Column width={3}>
-      <TeamSidebar
-        teamName="ivanchean is Cool"
-        username="ivanchean the first"
-        channelNames={['general', 'freedom']}
-        usersToDm={['slackbot', 'ivanchean the first', 'ivanchean the second']}
-      />
-    </Grid.Column>
-    <Grid.Column width={10}>
-      <TeamHeader />
-      <MessageInput />
-    </Grid.Column>
-  </Grid>
+  <AppLayout>
+    <Teams
+      teams={[{ id: 1, letter: 'B' }, { id: 2, letter: 'Q' }]}
+    />
+    <Channels
+      teamName="Team Name"
+      username="Username"
+      channels={[{ id: 1, name: 'general' }, { id: 2, name: 'random' }]}
+      users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'user1' }]}
+    />
+    <Header>Header</Header>
+    <Messages>
+      <ul className="message-list">
+        <li></li>
+        <li></li>
+      </ul>
+    </Messages>
+    <Input>
+      <input type="text" placeholder="CSS Grid Layout Module" />
+    </Input>
+  </AppLayout>
 );
+
