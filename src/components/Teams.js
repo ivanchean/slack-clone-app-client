@@ -10,7 +10,7 @@ const TeamWrapper = styled.div`
 
 const TeamList = styled.ul`
   width: 100%;
-  padding-left: 0px;
+  padding-left: 0;
   list-style: none;
 `;
 
