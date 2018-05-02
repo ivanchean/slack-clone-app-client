@@ -22,6 +22,7 @@ const SideBarList = styled.ul`
 const paddingLeft = 'padding-left: 10px';
 
 const SideBarListItem = styled.li`
+  padding: 2px;
   ${paddingLeft};
   &:hover {
     background-color: #3e313c;
@@ -40,7 +41,7 @@ const channel = ({ id, name }) => <SideBarListItem key={`channel-${id}`}># {name
 
 const user = ({ id, name }) => (
   <SideBarListItem key={`user-${id}`}>
-    <Bubble /> {name}
+    <Bubble on={false} /> {name}
   </SideBarListItem>
 );
 
