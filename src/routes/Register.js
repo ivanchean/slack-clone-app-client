@@ -43,7 +43,7 @@ class Register extends React.Component {
 
     if (emailError) {
       errorList.push(emailError);
-    }   
+    }
 
     if (passwordError) {
       errorList.push(passwordError);
