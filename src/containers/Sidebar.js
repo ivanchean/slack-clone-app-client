@@ -29,6 +29,7 @@ const Sidebar = ({ currentTeamId }) => (
 
       const teamIdx = _.findIndex(allTeams, ['id', currentTeamId]);
       const team = allTeams[teamIdx];
+
       let username = '';
 
       try {
