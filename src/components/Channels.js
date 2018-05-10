@@ -41,7 +41,7 @@ const channel = ({ id, name }) => <SideBarListItem key={`channel-${id}`}># {name
 
 const user = ({ id, name }) => (
   <SideBarListItem key={`user-${id}`}>
-    <Bubble on={false} /> {name}
+    <Bubble on /> {name}
   </SideBarListItem>
 );
 
