@@ -1,23 +1,57 @@
 import React from 'react';
 import { Input, Form, Button, Modal } from 'semantic-ui-react';
+import { withFormik } from 'formik';
+import gql from 'graphql-tag';
+import { compose, graphql } from 'react-apollo';
 
 import '../styles/modal.css';
 
-const AddChannelModal = ({ open, onClose }) => (
+const AddChannelModal = ({
+  open,
+  onClose,
+  values,
+  handleChange,
+  handleBlur,
+  handleSubmit,
+  isSubmitting,
+}) => (
   <Modal open={open} onClose={onClose}>
     <Modal.Header>Add Channel</Modal.Header>
     <Modal.Content>
       <Form>
         <Form.Field>
-          <Input fluid placeholder="Channel name" />
+          <Input
+            value={values.name}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            name="name"
+            fluid
+            placeholder="Channel name"
+          />
         </Form.Field>
         <Form.Group>
-          <Button fluid>Cancel</Button>
-          <Button fluid>Create Channel</Button>
+          <Button disabled={isSubmitting} fluid onClick={onClose}>Cancel</Button>
+          <Button disabled={isSubmitting} fluid onClick={handleSubmit}>Create Channel</Button>
         </Form.Group>
       </Form>
     </Modal.Content>
   </Modal>
 );
 
-export default AddChannelModal;
+const createChannelMutation = gql`
+  mutation($teamId: Int!, $name: String!) {
+    createChannel(teamId: $teamId, name: $name)
+  }
+`;
+
+export default compose(
+  graphql(createChannelMutation),
+  withFormik({
+    mapPropsToValues: () => ({ name: '' }),
+    handleSubmit: async (values, { props: { onClose, teamId, mutate }, setSubmitting }) => {
+      await mutate({ variables: { teamId, name: values.name } });
+      onClose();
+      setSubmitting();
+    },
+  }),
+)(AddChannelModal);

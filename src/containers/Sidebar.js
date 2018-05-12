@@ -75,6 +75,7 @@ class Sidebar extends React.Component {
               onAddChannelClick={this.handleAddChannelClick}
             />,
             <AddChannelModal
+              teamId={currentTeamId}
               onClose={this.handleCloseAddChannelModal}
               open={this.state.openAddChannelModal}
               key="sidebar-add-channel-modal"
