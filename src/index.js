@@ -7,6 +7,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloLink } from 'apollo-link';
 import 'semantic-ui-css/semantic.min.css';
+import './styles/common.css';
 
 import registerServiceWorker from './registerServiceWorker';
 import Routes from './routes';
