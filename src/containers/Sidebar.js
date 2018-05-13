@@ -1,6 +1,5 @@
 import React from 'react';
 import { Query } from 'react-apollo';
-import findIndex from 'lodash/findIndex';
 import decode from 'jwt-decode';
 
 import Channels from '../components/Channels';
@@ -22,16 +21,13 @@ class Sidebar extends React.Component {
   };
 
   render() {
-    const { currentTeamId } = this.props;
+    const { teams, team } = this.props;
     return (
       <Query query={allTeamsQuery} >
         {({
           loading, error, data: { allTeams },
         }) => {
           if (loading || error) return null;
-
-          const teamIdx = currentTeamId ? findIndex(allTeams, ['id', parseInt(currentTeamId, 10)]) : 0;
-          const team = allTeams[teamIdx];
 
           let username = '';
 
@@ -48,10 +44,7 @@ class Sidebar extends React.Component {
           return [
             <Teams
               key="team-sidebar"
-              teams={allTeams.map(t => ({
-                id: t.id,
-                letter: t.name.charAt(0).toUpperCase(),
-              }))}
+              teams={teams}
             />,
             <Channels
               key="channels-sidebar"
