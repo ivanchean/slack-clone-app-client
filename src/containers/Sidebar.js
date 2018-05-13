@@ -22,10 +22,12 @@ class Sidebar extends React.Component {
 
   render() {
     const { teams, team } = this.props;
+
+    console.warn(teams);
     return (
       <Query query={allTeamsQuery} >
         {({
-          loading, error, data: { allTeams },
+          loading, error,
         }) => {
           if (loading || error) return null;
 
@@ -42,10 +44,7 @@ class Sidebar extends React.Component {
           }
 
           return [
-            <Teams
-              key="team-sidebar"
-              teams={teams}
-            />,
+            <Teams key="team-sidebar" teams={teams} />,
             <Channels
               key="channels-sidebar"
               teamName={team.name}

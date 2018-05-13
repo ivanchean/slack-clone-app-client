@@ -14,9 +14,10 @@ const ViewTeam = ({ data: { loading, allTeams }, match: { params: { teamId, chan
     return null;
   }
 
-  const teamIdx = !!teamId ? findIndex(allTeams, ['id', parseInt(teamId, 10)]) : 0;
+  const teamIdx = teamId ? findIndex(allTeams, ['id', parseInt(teamId, 10)]) : 0;
   const team = allTeams[teamIdx];
-  const channelIdx = !!channelId ? findIndex(team.channels, ['id', parseInt(channelId, 10)]) : 0;
+  const channelIdx = channelId ? findIndex(team.channels, ['id', parseInt(channelId, 10)]) : 0;
+  const channel = team.channels[channelIdx];
 
   return (
     <AppLayout>
@@ -27,14 +28,14 @@ const ViewTeam = ({ data: { loading, allTeams }, match: { params: { teamId, chan
         }))}
         team={team}
       />
-      <Header channelName="general" />
-      <Messages>
+      <Header channelName={channel.name} />
+      <Messages channelId={channel.id}>
         <ul className="message-list">
           <li></li>
           <li></li>
         </ul>
       </Messages>
-      <SendMessage channelName="general" />
+      <SendMessage channelName={channel.name} />
     </AppLayout>
   );
 };
