@@ -3,7 +3,6 @@ import { Input, Form, Button, Modal } from 'semantic-ui-react';
 import { withFormik } from 'formik';
 import gql from 'graphql-tag';
 import { compose, graphql } from 'react-apollo';
-import findIndex from 'lodash/findIndex';
 
 import '../styles/modal.css';
 import { allTeamsQuery } from '../graphql/team';
