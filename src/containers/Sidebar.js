@@ -26,7 +26,7 @@ class Sidebar extends React.Component {
     this.setState({ openInvitePeopleModal: true });
   };
 
-  handleCloseInvitePeople = () => {
+  handleCloseInvitePeopleModal = () => {
     this.setState({ openInvitePeopleModal: false });
   };
 
@@ -73,7 +73,7 @@ class Sidebar extends React.Component {
             />,
             <InvitePeopleModal
               teamId={team.id}
-              onClose={this.handleCloseAddChannelModal}
+              onClose={this.handleCloseInvitePeopleModal}
               open={openInvitePeopleModal}
               key="invite-people-modal"
             />,
