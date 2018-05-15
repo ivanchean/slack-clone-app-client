@@ -5,7 +5,6 @@ import gql from 'graphql-tag';
 import { compose, graphql } from 'react-apollo';
 
 import '../styles/modal.css';
-import { allTeamsQuery } from '../graphql/team';
 
 const AddChannelModal = ({
   open,
@@ -68,18 +67,6 @@ export default compose(
               name: values.name,
             },
           },
-        },
-        update: (proxy, { data: { createChannel } }) => {
-          const { ok, channel } = createChannel;
-          if (!ok) {
-            return;
-          }
-
-          const data = proxy.readQuery({ query: allTeamsQuery });
-          console.log(data);
-          const teamIdx = findIndex(data.allTeams, ['id', teamId]);
-          data.allTeams[teamIdx].channels.push(channel);
-          proxy.writeQuery({ query: allTeamsQuery, data });
         },
       });
       onClose();
