@@ -15,7 +15,7 @@ const messagesQuery = gql`
       user {
         username
       }
-      createdAt
+      created_at
     }
   }
 `;
