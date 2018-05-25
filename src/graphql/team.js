@@ -1,6 +1,5 @@
 import gql from 'graphql-tag';
 
-/* eslint-disable-next-line */
 export const allTeamsQuery = gql`
   {
     allTeams {
@@ -11,5 +10,15 @@ export const allTeamsQuery = gql`
         name
       }
     }
+    inviteTeams {
+      id
+      name
+      channels {
+        id
+        name
+      }
+    }
   }
 `;
+
+export const idk = {};

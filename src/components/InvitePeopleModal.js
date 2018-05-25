@@ -38,7 +38,7 @@ const InvitePeopleModal = ({
             Cancel
           </Button>
           <Button disabled={isSubmitting} fluid onClick={handleSubmit}>
-            Create Channel
+            Invite People
           </Button>
         </Form.Group>
       </Form>
