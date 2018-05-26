@@ -8,7 +8,7 @@ import { compose, graphql } from 'react-apollo';
 const SendMessageWrapper = styled.div`
   grid-column: 3;
   grid-row: 3;
-  padding: 10px;
+  padding: 20px;
 `;
 
 const ENTRR_KEY = 13;
