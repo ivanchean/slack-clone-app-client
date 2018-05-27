@@ -20,10 +20,20 @@ const newChannelMessageSubscription = gql`
 
 class MessageContainer extends React.Component {
   componentWillMount() {
+    this.subscribe(this.props.channelId);
+  }
+
+  componentWillReceiveProps({ channelId }) {
+    if (this.props.channelId !== channelId) {
+      this.subscribe(channelId);
+    }
+  }
+
+  subscribe = channelId =>
     this.props.data.subscribeToMore({
       document: newChannelMessageSubscription,
       variables: {
-        channelId: this.props.channelId,
+        channelId,
       },
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData) {
@@ -36,7 +46,6 @@ class MessageContainer extends React.Component {
         };
       },
     });
-  }
 
   render() {
     const { data: { loading, messages } } = this.props;

@@ -6,7 +6,7 @@ import Home from './Home';
 import Login from './Login';
 import Register from './Register';
 import ViewTeam from './ViewTeam';
-import createTeam from './createTeam';
+import createTeam from './CreateTeam';
 
 const isAuthenticated = () => {
   try {
