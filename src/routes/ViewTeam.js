@@ -12,7 +12,7 @@ import { allTeamsQuery } from '../graphql/team';
 
 const ViewTeam = ({
   data: { loading, allTeams, inviteTeams },
-  match: { params: { teamId, channelId } } 
+  match: { params: { teamId, channelId } },
 }) => {
   if (loading) {
     return null;
@@ -30,7 +30,7 @@ const ViewTeam = ({
 
   const channelIdInteger = parseInt(channelId, 10);
   const channelIdx = channelIdInteger ? findIndex(team.channels, ['id', channelIdInteger]) : 0;
-  const channel = channelIdx ? team.channels[0] : team.channels[channelIdx];
+  const channel = channelIdx === -1 ? team.channels[0] : team.channels[channelIdx];
 
   return (
     <AppLayout>
