@@ -4,7 +4,7 @@ import { withFormik } from 'formik';
 import gql from 'graphql-tag';
 import { compose, graphql } from 'react-apollo';
 
-import '../styles/modal.css';
+// import '../styles/modal.css';
 import normalizeErrors from '../normalizeErrors';
 
 const InvitePeopleModal = ({

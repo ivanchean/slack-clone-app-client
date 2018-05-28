@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 import { compose, graphql } from 'react-apollo';
 import findIndex from 'lodash/findIndex';
 
-import '../styles/modal.css';
+// import '../styles/modal.css';
 import { allTeamsQuery } from '../graphql/team';
 
 const AddChannelModal = ({
