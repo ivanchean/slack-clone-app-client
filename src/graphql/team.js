@@ -8,7 +8,6 @@ export const meQuery = gql`
       teams {
         id
         name
-        admin
         channels {
           id
           name
