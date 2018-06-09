@@ -26,12 +26,12 @@ const TeamListItem = styled.li`
   align-items: center;
   justify-content: center;
   font-size: 24px;
-  border-radius: 11px;
+  border-radius: 50%;
   cursor: pointer;
   &:hover {
     border-style: solid;
-    border-width: thick;
-    border-color: #767676;
+    border-width: 3px;
+    border-color: #00BCD4;
   }
 `;
 
