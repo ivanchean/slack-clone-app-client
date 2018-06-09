@@ -28,10 +28,10 @@ const TeamListItem = styled.li`
   font-size: 24px;
   border-radius: 50%;
   cursor: pointer;
+  border: thick solid #676066;
+  transition: border .2s;
   &:hover {
-    border-style: solid;
-    border-width: 3px;
-    border-color: #00BCD4;
+    border-color: #767676;
   }
 `;
 
